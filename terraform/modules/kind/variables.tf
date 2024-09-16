@@ -24,11 +24,11 @@ variable "name" {
 variable "config" {
 
   type = object({
-    addon_config = optional(object({
-      enable_ingress_nginx = optional(bool, false)
-    }), null)
-    stage = string
-    cluster = object({
+    clusters = list(object({
+      addon_config = optional(object({
+        enable_ingress_nginx = optional(bool, false)
+      }), null)
+      stage          = string
       name           = string
       node_image     = string
       wait_for_ready = bool
@@ -46,6 +46,6 @@ variable "config" {
           }))
         }))
       })
-    })
+    }))
   })
 }

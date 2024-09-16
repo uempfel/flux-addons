@@ -1,14 +1,15 @@
 resource "kind_cluster" "this" {
-  name           = var.name
-  node_image     = var.config.cluster.node_image
-  wait_for_ready = var.config.cluster.wait_for_ready
+  for_each       = { for v in var.config.clusters : v.stage => v }
+  name           = each.value.name
+  node_image     = each.value.node_image
+  wait_for_ready = each.value.wait_for_ready
 
   kind_config {
-    kind        = try(var.config.cluster.kind_config.kind, null)
-    api_version = try(var.config.cluster.kind_config.apiVersion, null)
+    kind        = try(each.value.kind_config.kind, null)
+    api_version = try(each.value.kind_config.apiVersion, null)
 
     dynamic "node" {
-      for_each = var.config.cluster.kind_config.nodes
+      for_each = each.value.kind_config.nodes
 
       content {
         role                   = try(node.value.role, null)
@@ -37,12 +38,17 @@ resource "github_repository" "this" {
   auto_init   = true # This is extremely important as flux_bootstrap_git will not work without a repository that has been initialised
 }
 
-# resource "flux_bootstrap_git" "this" {
-#   depends_on = [github_repository.this]
+resource "github_repository_file" "this" {
+  repository          = github_repository.this.name
+  branch              = "main"
+  file                = ".gitignore"
+  content             = "**/*.tfstate"
+  commit_message      = "Managed by Terraform"
+  commit_author       = "Terraform User"
+  commit_email        = "terraform@example.com"
+  overwrite_on_create = true
+}
 
-#   embedded_manifests = true
-#   path               = "clusters/${var.name}"
-# }
 
 resource "null_resource" "flux_bootstrap" {
 

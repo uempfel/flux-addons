@@ -1,0 +1,30 @@
+clusters:
+  - name: addon-user-a-dev
+    stage: dev
+    node_image: kindest/node:v1.31.0
+    wait_for_ready: true
+
+    addon_config:
+      enable_ingress_nginx: true
+      enable_cert_manager: true
+      enable_kube_prometheus_stack: true
+      enable_loki: true
+
+    kind_config:
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      nodes:
+      - role: control-plane
+        kubeadmConfigPatches:
+        - |
+          kind: InitConfiguration
+          nodeRegistration:
+            kubeletExtraArgs:
+              node-labels: "ingress-ready=true"
+        extraPortMappings:
+        - containerPort: 80
+          hostPort: 80
+          protocol: TCP
+        - containerPort: 443
+          hostPort: 443
+          protocol: TCP
