@@ -39,7 +39,7 @@ spec:
       metrics:
         enabled: true
         serviceMonitor:
-          enabled: true
+          enabled: false
       config:
         # updated ciphers neede for IE Windows Server 2016 connect.
         # see: https://github.com/ssllabs/research/wiki/SSL-and-TLS-Deployment-Best-Practices
