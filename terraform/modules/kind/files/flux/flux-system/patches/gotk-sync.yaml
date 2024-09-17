@@ -1,0 +1,13 @@
+# DO NOT EDIT. This manifest is managed by terraform at https://gitlab.smartify-it.de/smf/platform/automation/customer-automation.  
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  include:
+    - repository:
+        name: addons
+      fromPath: addons/${stage}
+      toPath: addons

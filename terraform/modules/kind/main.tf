@@ -1,5 +1,9 @@
+locals {
+  environments_map = { for v in var.config.clusters : v.stage => v }
+}
+
 resource "kind_cluster" "this" {
-  for_each       = { for v in var.config.clusters : v.stage => v }
+  for_each       = local.environments_map
   name           = each.value.name
   node_image     = each.value.node_image
   wait_for_ready = each.value.wait_for_ready
@@ -38,20 +42,8 @@ resource "github_repository" "this" {
   auto_init   = true # This is extremely important as flux_bootstrap_git will not work without a repository that has been initialised
 }
 
-resource "github_repository_file" "this" {
-  repository          = github_repository.this.name
-  branch              = "main"
-  file                = ".gitignore"
-  content             = "**/*.tfstate"
-  commit_message      = "Managed by Terraform"
-  commit_author       = "Terraform User"
-  commit_email        = "terraform@example.com"
-  overwrite_on_create = true
-}
-
-
 resource "null_resource" "flux_bootstrap" {
-
+  for_each       = local.environments_map
   provisioner "local-exec" {
     environment = {
       "GITHUB_TOKEN" = var.github_token
@@ -60,8 +52,12 @@ resource "null_resource" "flux_bootstrap" {
     quiet       = true
     interpreter = ["/bin/bash", "-c"]
     command     = <<EOF
-    flux bootstrap github --owner=${var.github_org} --repository=${var.name} --private=false --personal=true --path=clusters/${var.name}
+    flux bootstrap github --owner=${var.github_org} --repository=${var.name} --private=false --personal=true --path=clusters/${each.value.stage} --cluster=kind-${each.value.name}
     EOF
   }
-  depends_on = [kind_cluster.this, github_repository.this]
+  depends_on = [
+    kind_cluster.this,
+    github_repository.this,
+    github_repository_file.this
+  ]
 }
