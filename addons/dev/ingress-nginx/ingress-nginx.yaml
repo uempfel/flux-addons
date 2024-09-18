@@ -22,6 +22,8 @@ metadata:
   namespace: ingress-nginx
 spec:
   interval: 30m
+  install:
+    disableWait: true
   chart:
     spec:
       chart: ingress-nginx
@@ -31,6 +33,7 @@ spec:
         name: ingress-nginx
         namespace: ingress-nginx
       interval: 12h
+
   values:
     controller:
       watchIngressWithoutClass: true
