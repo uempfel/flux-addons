@@ -24,6 +24,11 @@ spec:
         name: metrics-server
         namespace: kube-system
       interval: 12h
+  valuesFrom:
+    - kind: ConfigMap
+      name: metrics-server-values
+      valuesKey: values.yaml
+      optional: true
   values:
     args:
       - --kubelet-insecure-tls

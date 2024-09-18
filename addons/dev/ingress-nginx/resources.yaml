@@ -33,7 +33,11 @@ spec:
         name: ingress-nginx
         namespace: ingress-nginx
       interval: 12h
-
+  valuesFrom:
+    - kind: ConfigMap
+      name: ingress-nginx-values
+      valuesKey: values.yaml
+      optional: true
   values:
     controller:
       watchIngressWithoutClass: true

@@ -31,4 +31,9 @@ spec:
         name: prometheus-community
         namespace: observability
       interval: 12h
+  valuesFrom:
+    - kind: ConfigMap
+      name: observability-values
+      valuesKey: values.yaml
+      optional: true
   values: {}
