@@ -35,7 +35,7 @@ variable "config" {
       name           = string
       node_image     = string
       wait_for_ready = bool
-      kind_config = object({
+      kind_config = optional(object({
         kind       = string
         apiVersion = string
         #kubeadmConfigPatches = list(string)
@@ -48,7 +48,7 @@ variable "config" {
             protocol      = string
           }))
         }))
-      })
+      }))
     }))
   })
 }

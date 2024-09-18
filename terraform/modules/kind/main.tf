@@ -8,30 +8,30 @@ resource "kind_cluster" "this" {
   node_image     = each.value.node_image
   wait_for_ready = each.value.wait_for_ready
 
-  kind_config {
-    kind        = try(each.value.kind_config.kind, null)
-    api_version = try(each.value.kind_config.apiVersion, null)
+  # kind_config {
+  #   kind        = try(each.value.kind_config.kind, null)
+  #   api_version = try(each.value.kind_config.apiVersion, null)
 
-    dynamic "node" {
-      for_each = each.value.kind_config.nodes
+  #   dynamic "node" {
+  #     for_each = each.value.kind_config.nodes
 
-      content {
-        role                   = try(node.value.role, null)
-        kubeadm_config_patches = try(node.value.kubeadmConfigPatches, null)
+  #     content {
+  #       role                   = try(node.value.role, null)
+  #       kubeadm_config_patches = try(node.value.kubeadmConfigPatches, null)
 
-        dynamic "extra_port_mappings" {
-          for_each = toset(node.value.extraPortMappings)
-          #iterator = "value"
-          content {
-            container_port = try(extra_port_mappings.value.containerPort, null)
-            host_port      = try(extra_port_mappings.value.hostPort, null)
-            protocol       = try(extra_port_mappings.value.protocol, null)
-          }
-        }
-      }
+  #       dynamic "extra_port_mappings" {
+  #         for_each = toset(node.value.extraPortMappings)
+  #         #iterator = "value"
+  #         content {
+  #           container_port = try(extra_port_mappings.value.containerPort, null)
+  #           host_port      = try(extra_port_mappings.value.hostPort, null)
+  #           protocol       = try(extra_port_mappings.value.protocol, null)
+  #         }
+  #       }
+  #     }
 
-    }
-  }
+  #   }
+  # }
 }
 
 
