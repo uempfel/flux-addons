@@ -43,7 +43,7 @@ resource "github_repository" "this" {
 }
 
 resource "null_resource" "flux_bootstrap" {
-  for_each       = local.environments_map
+  for_each = local.environments_map
   provisioner "local-exec" {
     environment = {
       "GITHUB_TOKEN" = var.github_token

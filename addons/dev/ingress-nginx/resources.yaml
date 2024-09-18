@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: ingress-nginx
   labels:
-    managed-by: platform
+    toolkit.fluxcd.io/tenant: platform-team
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository

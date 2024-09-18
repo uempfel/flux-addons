@@ -27,6 +27,9 @@ variable "config" {
     clusters = list(object({
       addon_config = optional(object({
         enable_ingress_nginx = optional(bool, false)
+        enable_metrics_server = optional(bool, false)
+        enable_observability = optional(bool, false)
+        enable_cert_manager = optional(bool, false)
       }), null)
       stage          = string
       name           = string
