@@ -41,7 +41,5 @@ No modules.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_flux_files_map"></a> [flux\_files\_map](#output\_flux\_files\_map) | n/a |
+No outputs.
 <!-- END_TF_DOCS -->
