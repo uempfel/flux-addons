@@ -13,10 +13,6 @@ locals {
   flux_files_map = { for entry in local.flux_files_helper : entry.repo_file_path => entry }
 }
 
-output "flux_files_map" {
-  value = local.flux_files_map
-}
-
 resource "github_repository_file" "this" {
   for_each   = local.flux_files_map
   repository = github_repository.this.name
